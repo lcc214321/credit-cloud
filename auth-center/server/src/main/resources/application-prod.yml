@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+mysql:
+  datasource:
+    driver: com.mysql.jdbc.Driver
+    url: jdbc:mysql://passplat.mysql.rds.aliyuncs.com:3306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: credit
+    password: 6tZy4taw4m9vl5XB
+
+logging:
+  config: classpath:logback-dev.xml
+  file: ./logs/cloud-auth.log
+

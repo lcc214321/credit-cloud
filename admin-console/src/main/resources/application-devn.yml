@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+mysql:
+  datasource:
+    driver:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.16.36.18:3306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: credit
+    password: P@ssw0rd2018
+
+
+
+spring:
+  elasticsearch:
+    jest:
+      uris:
+      - http://172.16.36.19:9200
+      read-timeout: 60s
+  gson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZZ
+
+client:
+  captcha:
+    url: http://captcha.devn.chinacsci.com
+logging:
+  config: classpath:logback-dev.xml
+  file: ./logs/cloud-admin.log
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone:  http://localhost:8761/eureka
+#  instance:
+#    #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除
+#    #注意，EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效，这个配置一般为服务刷新时间配置的三倍
+#    #默认90s
+#    lease-expiration-duration-in-seconds: 15
+#    #服务刷新时间配置，每隔这个时间会主动心跳一次
+#    #默认30s
+#    ease-renewal-interval-in-seconds: 5

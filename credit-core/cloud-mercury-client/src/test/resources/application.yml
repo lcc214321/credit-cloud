@@ -1,0 +1,5 @@
+client:
+  cloud-mercury: #征信 企业服务.
+    url: https://daas.chinacscs.com/api
+    apiKey: 2ebb46d2-8e73-4c19-b189-85d7df06f6c5
+    secretKey: 7b7e412c-5782-4095-8d65-61fb8c6d5501

@@ -1,0 +1,16 @@
+info:
+  component: Credit Cloud Core
+
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: credit-cloud-core
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+
+

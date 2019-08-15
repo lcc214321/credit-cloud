@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+mysql:
+  datasource:
+    driver:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://demodbase.mysql.rds.aliyuncs.com:3306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8
+    #url: jdbc:mysql://47.106.215.60:13308/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: credit
+    password: P@ssw0rd2018
+
+spring:
+  elasticsearch:
+    jest:
+      uris:
+      #- http://47.106.215.60:19200/
+      - http://10.81.1.20:9200/
+      read-timeout: 60s
+  gson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZZ
+
+client:
+  captcha:
+    url: http://captcha.demo.chinacsci.com
+
+logging:
+  config: classpath:logback-dev.xml
+  file: ./logs/cloud-admin.log
+

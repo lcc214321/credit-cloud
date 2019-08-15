@@ -1,0 +1,21 @@
+info:
+  component: Account Service
+
+
+
+spring:
+  profiles:
+    active: local
+  application:
+      name: auth-center
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+security:
+  jwt:
+    tokenExpMinutes: 5
+    tokenIssuer: opbu.chinacsci.com
+    tokenSigningKey: nepkq3d6m2fum1zmvwuwtxzdchowzw
+    refreshTokenExpHours: 24

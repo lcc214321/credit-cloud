@@ -1,0 +1,7 @@
+client:
+  cloud-mirror: #云镜服务 个人征信
+    url: https://api.xinyongyun.com
+    apiKey: csci_pdd
+    secretKey: nMuLHtb46oyb5uGznHIp
+    appId: credit-cloud
+

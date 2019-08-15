@@ -1,0 +1,8 @@
+dependencies {
+    compile('com.fasterxml.jackson.core:jackson-databind')
+    compile('com.fasterxml.jackson.core:jackson-core')
+    compile('com.fasterxml.jackson.core:jackson-annotations')
+    compile('org.slf4j:slf4j-api')
+    compile('io.swagger:swagger-annotations')
+    compile('org.hibernate:hibernate-validator')
+}

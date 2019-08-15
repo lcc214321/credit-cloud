@@ -1,0 +1,136 @@
+buildscript {
+    def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    repositories {
+        mavenLocal()
+        maven { url localRepositoryPath }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
+        classpath ('io.franzbecker:gradle-lombok:1.14')
+        classpath ('nu.studer:gradle-jooq-plugin:3.0.2')
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'io.franzbecker.gradle-lombok'
+    apply plugin: 'maven'
+    // apply from: "$rootDir/analysis.gradle"
+    def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+
+    group = 'com.csci.cloud.auth'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+    version '1.0.0'
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 10, 'seconds'
+    }
+
+    uploadArchives {
+        repositories {
+            //mavenDeployer 需要依赖 apply plugin: 'maven'
+            mavenDeployer   {
+                repository(url: localRepositoryPath)
+                pom.project {
+                    name = project.name        // 当前项目名称
+                    version = project.version   //当前项目版本  0.0.1
+                    groupId = project.group     //  当前项目组  com.xxx
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url localRepositoryPath }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom 'io.spring.platform:platform-bom:Cairo-SR2'
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE'
+        }
+        dependencies {
+            dependency('com.sun.xml.bind:jaxb-xjc:2.1.7')
+
+            dependency 'com.alibaba:druid:1.0.29'
+            dependency 'mysql:mysql-connector-java:5.1.44'
+
+            // log
+            dependency group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '4.11'
+
+            // json
+            dependency 'org.codehaus.jackson:jackson-core-asl:1.9.6'
+            dependency 'org.codehaus.jackson:jackson-mapper-asl:1.9.6'
+            dependency 'org.codehaus.jackson:jackson-jaxrs:1.9.6'
+
+            // swagger
+            dependency('io.springfox:springfox-swagger2:2.9.2'){
+                exclude module: 'swagger-models'
+                exclude module:'swagger-annotation'
+            }
+            dependency('io.springfox:springfox-swagger-ui:2.9.2')
+            dependency('io.swagger:swagger-annotations:1.5.21')
+            dependency('io.swagger:swagger-models:1.5.21')
+
+            // jwt
+            dependency 'io.jsonwebtoken:jjwt:0.9.0'
+
+            // password
+            dependency 'org.jasypt:jasypt:1.9.2'
+
+            //credit-cloud
+            dependency 'com.csci.cloud.core:lib-common:1.0.0'
+        }
+    }
+
+    dependencies {
+        // commons
+        compile 'org.apache.commons:commons-collections4:4.1'
+        compile 'commons-codec:commons-codec:1.10'
+        compile('org.apache.commons:commons-lang3')
+
+        testCompile 'junit:junit:4.12'
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourceJar {
+                    classifier "sources"
+                }
+            }
+        }
+        repositories {
+            maven {
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url 'http://maven.aliyun.com/nexus/content/groups/public/'
+                } else {
+                    url 'http://maven.aliyun.com/nexus/content/groups/public/'
+                }
+
+            }
+        }
+    }
+
+}

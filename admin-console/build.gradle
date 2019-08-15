@@ -1,0 +1,188 @@
+group 'com.csci.cloud.admin'
+version '1.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+
+repositories {
+    mavenLocal()
+    maven { url localRepositoryPath }
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
+}
+
+
+buildscript {
+    def localRepository = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    repositories {
+        mavenLocal()
+        maven { url localRepository }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
+        classpath "org.flywaydb:flyway-gradle-plugin:4.0.3"
+        classpath ('io.franzbecker:gradle-lombok:1.14')
+        classpath ('nu.studer:gradle-jooq-plugin:3.0.2')
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+apply plugin: 'nu.studer.jooq'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'org.flywaydb.flyway'
+//apply plugin: 'docker'
+apply plugin: 'io.franzbecker.gradle-lombok'
+//apply from: "$rootDir/analysis.gradle"
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:Cairo-SR2'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE'
+    }
+}
+
+dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework:spring-jdbc:4.3.13.RELEASE'
+
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+    compile('io.github.openfeign:feign-jackson')
+
+    //jooq
+    compile("org.jooq:jooq")
+    compile 'com.alibaba:druid:1.0.29'
+    compile 'mysql:mysql-connector-java:5.1.44'
+    compile ('org.springframework.boot:spring-boot-starter-jooq')
+    jooqRuntime 'mysql:mysql-connector-java:5.1.44'
+
+
+    // log
+    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '4.11'
+
+    // json
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.6'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.6'
+    compile 'org.codehaus.jackson:jackson-jaxrs:1.9.6'
+
+    // swagger
+    compile('io.springfox:springfox-swagger2:2.9.2'){
+        exclude module: 'swagger-models'
+        exclude module:'swagger-annotation'
+    }
+    compile('io.springfox:springfox-swagger-ui:2.9.2')
+    compile('io.swagger:swagger-annotations:1.5.21')
+    compile('io.swagger:swagger-models:1.5.21')
+
+    // jwt
+    compile 'io.jsonwebtoken:jjwt:0.9.0'
+
+    // password
+    compile 'org.jasypt:jasypt:1.9.2'
+
+    // commons
+    compile 'org.apache.commons:commons-collections4:4.1'
+    compile 'commons-codec:commons-codec:1.10'
+    compile('org.apache.commons:commons-lang3')
+
+    //guava
+    compile('com.google.guava:guava')
+
+    // test
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+    //lombok
+    compile('org.projectlombok:lombok')
+
+    //es
+    compile('io.searchbox:jest')
+    compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+
+    //credit-cloud
+
+    compile('com.csci.cloud.core:lib-common:1.0.0')
+
+}
+
+
+
+flyway {
+    user = 'root'
+    url = 'jdbc:mysql://139.224.144.24:13306/?useSSL=false&useUnicode=true&characterEncoding=utf8'
+    password = 'loansys2018'
+    schemas = ['credit_cloud_console']
+    locations = ["filesystem:${projectDir}/src/main/resources/db/migration"]
+}
+
+
+bootJar {
+    baseName = 'admin-console'
+    mainClassName = 'com.csci.cloud.admin.AccountBootstrap'
+}
+
+//disable jooq task when run bootJar
+gradle.taskGraph.whenReady {
+    taskGraph ->
+        if (taskGraph.hasTask(bootJar)) {
+            generateSampleJooqSchemaSource.enabled = false
+        }
+}
+
+/*
+task buildDocker(type: Docker, dependsOn: bootJar, group: "build") {
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}*/
+
+
+jooq {
+    version = '3.11.4'
+    edition = 'OSS'
+    sample(sourceSets.main) {
+        jdbc {
+            driver = 'com.mysql.jdbc.Driver'
+            url = 'jdbc:mysql://172.16.36.18:3306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8'
+            user = 'credit'
+            password = 'P@ssw0rd2018'
+            schema = 'credit_cloud_console'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.mysql.MySQLDatabase'
+                inputSchema = 'credit_cloud_console'
+            }
+            generate {
+                relations = true
+                deprecated = false
+                daos=true
+                records = true
+                immutablePojos = false
+                fluentSetters = true
+            }
+            target {
+                packageName = 'com.csci.cloud.admin.jooq'
+                directory = 'src/main/java'
+            }
+        }
+    }
+}
+

@@ -1,0 +1,14 @@
+server:
+  port: 8030
+
+mysql:
+  datasource:
+    driver:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://139.224.144.24:13306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: loansys2018
+
+logging:
+  config: classpath:logback-dev.xml
+  file: ./logs/cloud-auth.log
+

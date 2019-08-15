@@ -1,0 +1,13 @@
+dependencies {
+
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+    compile('io.github.openfeign:feign-core')
+    compile('io.github.openfeign:feign-jackson')
+    compile('io.github.openfeign.form:feign-form')
+    compile('io.github.openfeign.form:feign-form-spring')
+    compile('org.projectlombok:lombok')
+    compile 'com.squareup.okhttp3:okhttp'
+    compile('io.github.openfeign:feign-okhttp')
+    compile project(":lib-common")
+
+}

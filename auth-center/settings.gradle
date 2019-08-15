@@ -1,0 +1,5 @@
+rootProject.name = 'auth-center'
+include 'server'
+include 'client'
+include 'lib-auth-common'
+

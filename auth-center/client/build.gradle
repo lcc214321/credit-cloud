@@ -1,0 +1,6 @@
+dependencies {
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+    compile('org.projectlombok:lombok')
+    compile project(':lib-auth-common')
+    compile 'com.csci.cloud.core:lib-common'
+}

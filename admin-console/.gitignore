@@ -1,0 +1,16 @@
+.classpath
+.project
+.settings/
+
+*.iml
+*.iws
+.idea/
+
+/.idea/
+/.gradle/
+/admin-console.iml
+/fincore.iml
+/apply-gateway.iml
+/logs/
+/build
+/out

@@ -1,0 +1,8 @@
+spring:
+  application:
+      name: admin-console
+  cloud:
+    zookeeper:
+      connectString: ${DR_CFG_ZOOKEEPER_ENV_URL}
+      config:
+        groupName:  credit-cloud

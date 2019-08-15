@@ -1,0 +1,85 @@
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'nu.studer.jooq'
+
+
+dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework:spring-jdbc:4.3.13.RELEASE'
+
+    //jooq
+    compile("org.jooq:jooq")
+    compile 'com.alibaba:druid'
+    compile 'mysql:mysql-connector-java'
+    compile ('org.springframework.boot:spring-boot-starter-jooq')
+    jooqRuntime 'mysql:mysql-connector-java'
+    // log
+    compile('net.logstash.logback:logstash-logback-encoder')
+
+    // swagger
+    compile('io.springfox:springfox-swagger2')
+    compile('io.springfox:springfox-swagger-ui')
+    compile('io.swagger:swagger-annotations')
+    compile('io.swagger:swagger-models')
+
+    // jwt
+    compile 'io.jsonwebtoken:jjwt'
+
+    // password
+    compile 'org.jasypt:jasypt'
+
+    compile 'com.csci.cloud.core:lib-common'
+
+    compile project(":lib-auth-common")
+
+}
+
+bootJar {
+    baseName = 'auth-center'
+    mainClassName = 'com.csci.cloud.auth.server.AuthServerBootstrap'
+}
+
+//disable jooq task when run bootJar
+gradle.taskGraph.whenReady {
+    taskGraph ->
+        if (taskGraph.hasTask(bootJar)) {
+            generateSampleJooqSchemaSource.enabled = false
+        }
+}
+
+jooq {
+    version = '3.11.4'
+    edition = 'OSS'
+    sample(sourceSets.main) {
+        jdbc {
+            driver = 'com.mysql.jdbc.Driver'
+            url = 'jdbc:mysql://172.16.36.18:3306/credit_cloud_console?useSSL=false&useUnicode=true&characterEncoding=utf8'
+            user = 'credit'
+            password = 'P@ssw0rd2018'
+            schema = 'credit_cloud_console'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.mysql.MySQLDatabase'
+                inputSchema = 'credit_cloud_console'
+            }
+            generate {
+                relations = true
+                deprecated = false
+                daos=true
+                records = true
+                immutablePojos = false
+                fluentSetters = true
+            }
+            target {
+                packageName = 'com.csci.cloud.auth.server.jooq'
+                directory = 'src/main/java'
+            }
+        }
+    }
+}

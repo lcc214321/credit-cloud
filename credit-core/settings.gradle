@@ -1,0 +1,6 @@
+rootProject.name = 'credit-core'
+include 'lib-common'
+include 'cloud-mercury-client'
+include 'cloud-mirror-client'
+include 'credit-server'
+

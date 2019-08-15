@@ -1,0 +1,74 @@
+server:
+  port: 8020
+
+spring:
+  elasticsearch:
+    jest:
+      uris:
+      - http://172.16.36.19:9200
+      read-timeout: 60s
+  gson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZZ
+
+  rabbitmq:
+    host: 172.16.36.19
+    port: 5672
+    username: loansys
+    password: loansys2018
+    virtual-host: msgbus
+
+zuul:
+  retryable: true
+  routes:
+    home:
+      path: /**
+      url: forward:/
+
+    credio-plus:
+      path: /chain/**
+      url: https://baas-api.chinacsci.com
+  ignored-patterns:
+  - /api/health/**
+
+
+client:
+  cloud-mirror: #云镜服务 个人征信
+    url: https://api.xinyongyun.com
+    apiKey: csci_pdd
+    secretKey: nMuLHtb46oyb5uGznHIp
+    appId: credit-cloud
+  auth:
+    url: http://auth-cc.devn.chinacsci.com
+  cloud-mercury: #征信 企业服务.
+    url: https://daas.chinacscs.com/api
+    apiKey: 2ebb46d2-8e73-4c19-b189-85d7df06f6c5
+    secretKey: 7b7e412c-5782-4095-8d65-61fb8c6d5501
+
+feign:
+  enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+
+spring.cloud.stream:
+
+  bindings.api-record-input-channel.destination: com.csci.cloud.server.api-trace
+  rabbit.bindings.api-record-input-channel.producer.routing-key-expression: '''api-trace.result'''
+
+  bindings.api-record-output-channel.destination: com.csci.cloud.server.api-trace
+  bindings.api-record-output-channel.group: api-trace.result
+  rabbit.bindings.api-record-output-channel.consumer.bindingRoutingKey: api-trace.result
+
+
+logging:
+  config: classpath:logback-dev.xml
+  file: ./logs/cloud-core.log
+
