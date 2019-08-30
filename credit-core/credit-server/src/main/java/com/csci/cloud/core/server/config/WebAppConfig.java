@@ -19,6 +19,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 /**
  * 应用配置.
+ *  WebMvcConfigurationAdapter 在Spring Boot2.X中已过时.
+ *  https://cloud.tencent.com/developer/article/148221
  */
 @Configuration
 public class WebAppConfig extends WebMvcConfigurationSupport {
