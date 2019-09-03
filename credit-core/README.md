@@ -97,6 +97,9 @@ https://www.cnblogs.com/reasonzzy/p/11130117.html
 # 为Nexus配置阿里云代理仓库
 https://blog.csdn.net/lishuoboy/article/details/99946230
 
+# 使用Docker Registry快速搭建私有镜像仓库
+https://blog.csdn.net/qq_32523587/article/details/82879015
+https://www.jianshu.com/p/fef890c4d1c2
 
 
 
