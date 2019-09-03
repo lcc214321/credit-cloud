@@ -91,7 +91,8 @@ docker run harbor.dev.chinacsci.com/credit-cloud/admin-console:1.0-SNAPSHOT
 #gradle多模块打jar，上传本地仓库，并给本地其他项目使用
 https://segmentfault.com/a/1190000019222437?utm_source=tag-newest
 
-
+# CentOS7-Docker 搭建Maven私服
+https://www.cnblogs.com/reasonzzy/p/11130117.html
 
 
 
