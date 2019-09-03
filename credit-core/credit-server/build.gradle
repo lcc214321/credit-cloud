@@ -1,10 +1,6 @@
 buildscript {
-    def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
     repositories {
-        mavenLocal()
-        maven { url localRepositoryPath }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        mavenCentral()
+        maven { url 'http://172.16.79.33:8081/repository/maven-public/' }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
@@ -20,7 +16,6 @@ bootJar {
 }
 
 dependencies {
-
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('commons-codec:commons-codec')
     compile('io.springfox:springfox-swagger2')

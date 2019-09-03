@@ -1,10 +1,6 @@
 buildscript {
-    def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '/.m2/repository').absolutePath
     repositories {
-        maven { url localRepositoryPath }
-        mavenLocal()
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        mavenCentral()
+        maven { url 'http://172.16.79.33:8081/repository/maven-public/' }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
@@ -18,10 +14,7 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'io.franzbecker.gradle-lombok'
-    // apply from: "$rootDir/analysis.gradle"
     apply plugin: 'maven-publish'
-    apply plugin: 'maven'
-    def localRepositoryPath = 'file://' + new File(System.getProperty('user.home'), '/.m2/repository').absolutePath
 
     group = 'com.csci.cloud.core'
     version = '1.0.0'
@@ -30,26 +23,8 @@ subprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
-    uploadArchives {
-        repositories {
-            //mavenDeployer 需要依赖 apply plugin: 'maven'
-            mavenDeployer   {
-                repository(url: localRepositoryPath)
-                pom.project {
-                    name = project.name        // 当前项目名称
-                    version = project.version   //当前项目版本  0.0.1
-                    groupId = project.group     //  当前项目组  com.xxx
-                }
-            }
-        }
-    }
-
     repositories {
-        maven { url localRepositoryPath }
-        mavenLocal()
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'http://172.16.79.33:8081/repository/maven-public/' }
     }
 
     configurations.all {
@@ -110,13 +85,14 @@ subprojects {
         repositories {
             maven {
                 if (project.version.endsWith('-SNAPSHOT')) {
-                    mavenLocal()
-                  //  url 'http://maven.aliyun.com/nexus/content/groups/public/'
+                    url 'http://172.16.79.33:8081/repository/maven-snapshots/'
                 } else {
-                    mavenLocal()
-                  //  url 'http://maven.aliyun.com/nexus/content/groups/public/'
+                    url 'http://172.16.79.33:8081/repository/maven-releases/'
                 }
-
+                credentials {
+                    username 'admin'
+                    password 'csci1234'
+                }
             }
         }
     }

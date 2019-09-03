@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-alpine
-MAINTAINER Ben.Ma <macl@chinacsci.com>
+MAINTAINER wanghong <wanghong@chinacsci.com>
 
 #----------------------------Copy 项目目录到容器里--------------------------------------------
 
