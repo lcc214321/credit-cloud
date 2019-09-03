@@ -94,6 +94,9 @@ https://segmentfault.com/a/1190000019222437?utm_source=tag-newest
 # CentOS7-Docker 搭建Maven私服
 https://www.cnblogs.com/reasonzzy/p/11130117.html
 
+# 为Nexus配置阿里云代理仓库
+https://blog.csdn.net/lishuoboy/article/details/99946230
+
 
 
 
